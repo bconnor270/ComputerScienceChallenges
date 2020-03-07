@@ -1,0 +1,271 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <title>textured_blue</title>
+  <meta name="description" content="website description" />
+  <meta name="keywords" content="website keywords, website keywords" />
+  <meta http-equiv="content-type" content="text/html; charset=windows-1252" />
+  <link rel="stylesheet" type="text/css" href="style/style.css" title="style" />
+</head>
+
+<body>
+  <div id="main">
+    <div id="header">
+      <div id="logo">
+        <div id="logo_text">
+          <!-- class="logo_colour", allows you to change the colour of the text -->
+          <h1><a href="index.html">Linux and QEMU: <span class="logo_colour">a Beginner's Journey</span></a></h1>
+          <h2>By Benjamin Mark Connor - QUB</h2>
+        </div>
+      </div>
+      <div id="menubar">
+        <ul id="menu">
+          <!-- put class="selected" in the li tag for the selected page - to highlight which page you're on -->
+          <li class="selected"><a href="index.html">Home</a></li>
+        </ul>
+      </div>
+    </div>
+    <div id="site_content">
+      
+      <div id="content">
+        <!-- insert the page content here -->
+        <h1>
+    <strong><u>Linux and QEMU: A Beginner's Journey</u></strong>
+</h1>
+<h2>
+    <strong>Intro</strong>
+</h2>
+<p>
+    Welcome to my quick blogpost! I am a Computer Science student who has
+    recently delved into the (as I now know, very deep) pool of virtualization
+    on Linux. A complete beginner to both Linux and Virtualization, this was a
+    daunting prospect for me but one that I was excited to get started with.
+    This post is written with a few intentions: 1. To provide a quick run-down
+    on the progress of my project, should anyone want to advance it. 2. To be a
+    sort of longhand tutorial on how to get started with QEMU on Linux (however
+    I have written a number of how-to guides for different areas that would be
+    more useful than reading this blogpost if a walkthrough is what you're
+    looking for). 3. A bit of light, nerdy entertainment. 4. To show that you
+    can become proficient in and gain valuable knowledge on bleeding-edge
+    technologies with nothing but your own personal research, commitment and
+    intuition!
+</p>
+<p>
+    Firstly a quick bit of background information on how I got started with
+    this project. I was led along this path by a module I take at university
+    known as 'Computer Science Challenges', wherein we pick a project to
+    undertake and work on, and keep a weekly diary logging our thoughts,
+    feelings and progress as well as a plan on the future of the project. The
+    initial end-goal statement of my project was '
+    <em>
+        Develop a system that enables the computing infrastructure of an
+        organization (both hardware and software) to be simulated virtually
+    </em>
+    '. Disclaimer: as of yet I am nowhere near a system that can simulate a
+    whole network virtually; however the goal of this module was not solely to
+    produce a functioning piece of project work at the end, but to show that we
+    have tried and persevered through problems and provided helpful information
+    with others along the way.
+</p>
+<p>
+    I hope you enjoy reading!
+</p>
+<h2>
+    <strong>Linux? Ubuntu? Sudo? Help!</strong>
+</h2>
+<p>
+    <em>
+        NB: This section relates to dual-booting Windows 10 and Ubuntu and a
+        beginner's experience of Linux in general; if you're only interested in
+        virtualization feel free to skip ahead!
+    </em>
+</p>
+<p>
+    With the intention of using QEMU/KVM to run this simulation system, I had
+    to first install a Linux distribution. On the advice of my tutor I chose
+    Ubuntu, and it seemed like a fairly wieldy distro when compared to others
+    with my very limited understanding. I chose to dual-boot my laptop (mostly
+    because I find it particularly difficult to get any work done on a powerful
+    desktop PC with a vast library of video games installed) and so began the
+    process of installing Ubuntu.
+</p>
+<p>
+    Boy was this a pain.
+</p>
+<p>
+    I learned a <em>lot</em> about patience in this process; the first issue I
+    encountered was with the BitLocker security, as disabling secure boot is a
+    requirement for dual booting. I was being prompted to enter my 48-digit
+    recovery code every time I wanted to switch over to windows, which was a
+    tad inconvenient to say the least. I decided I would temporarily disable
+    BitLocker for the installation process, and attempt to re-enable it later.
+</p>
+<p>
+    The second issue I encountered was with the Ubuntu installer not allowing
+    any partitioning. I tried changing what felt like a million different BIOS
+    settings, performing check disk operations, disabling hibernation, and even
+    installing an older version of Ubuntu with the intention of updating
+    post-installation (the last vain attempt at which resulted in my laptop not
+    even recognizing my USB as a bootable disk). I almost caved in and used the
+    Ubuntu installer to format my hard drive and install Ubuntu as sole OS, but
+    decided I should take a breather and have a cup of tea before my emotions
+    got the better of me.
+</p>
+<p>
+    Finally a bit of research into some terminal commands revealed that Ubuntu
+    wasn't recognizing <em>any</em> drive partitions, not just the Windows
+    ones. A fresh google search led me to an AskUbuntu post that advised I
+    change my SATA mode on my laptop from RAID to AHCI. I'll be honest and
+    admit I don't really know what this does (however I'm sure a quick bit of
+    research would reveal that answer), but it worked and I could now install
+    Ubuntu. Victory at last!
+</p>
+<p>
+    Well, nearly. I started Ubuntu and it was insistent that my laptop didn't
+    have a Wi-Fi card. Some quick research revealed that it was likely because
+    I didn't pay enough attention at the installation phase and negated to
+    check the 'Install third-party drivers' box. A quick terminal command
+    sorted this out.
+</p>
+<p>
+    One thing I noted during this whole process was how <em>confusing</em>
+    Linux terminal commands were. Any resources I found were clearly aimed at
+    people with deeper understanding of Ubuntu than myself, and this was
+    something I would seek to rectify as I wrote my own tutorials in the
+    future.
+</p>
+<h2>
+    <strong>So QEMU: is it Q-E-M-U? Keemyou? Q-eemyou?</strong>
+</h2>
+<p>
+    And so began the journey of getting started with QEMU.
+    Uncharacteristically, installing QEMU and starting up my first Virtual
+    Machine (VM) went largely without hitch. Saying that, this was in no way
+    due to the available tutorials and documentation being helpful and
+    thorough; I found myself constantly combining information from different
+    sources in order to get things to work. This led me to the conclusion that
+    I should include the installation and first startup process in my first
+    how-to guide; 'One tutorial to rule them all!'.
+</p>
+<p>
+    Side-note, 'Keemyou' is my preferred form of pronunciation, but I'll hear
+    your case for the others too.
+</p>
+<h2>
+    <strong>Connecting QEMUs: A flock of VMs?</strong>
+</h2>
+<p>
+    The next step was to begin exploring networking the VMs.
+</p>
+<p>
+    And I thought the documentation for <em>installing</em> QEMU was bad.
+</p>
+<p>
+    I got very intimidated researching about networking with QEMU. The first
+    issue was the sheer amount of available information, and the seemingly
+    endless different ways to do the same thing. I also came across nearly as
+    much deprecated and outdated information as I did valid information, even
+    on the QEMU website! (I understand that old documentation has to be
+    archived, however nothing has been edited to show clearly that what you're
+    looking at is deprecated).
+</p>
+<p>
+Research showed that there are two main kinds of networking for QEMU:<strong>User-mode networking</strong>, and    <strong>TAP device networking</strong>. User-mode networking was the sort
+    of 'default' mode that QEMU enabled when you start up a VM, and it involves
+    using Network Address Translation to give the VM access to the outside
+    network, the internet etc. However, this mode does not let the VM run as
+    its own machine on the network, and vastly restricts the amount of
+    protocols the VM can make use of. This kind of networking would obviously
+    not work for a system where the idea is to simulate real-life machines
+    accurately, So I decided that TAP device networking was the way forward.
+</p>
+<p>
+    TAP networking involves the creation of a virtual TAP device for your
+    virtual machine. Next you need to create what is known as a virtual bridge
+    device on your host machine, and then 'enslave' your host network card and
+    the TAP device to the bridge. (The bridge can be thought of as a kind of
+    virtual switch). This in theory allows your VM to act on your outside
+    network as thought it were its own whole separate physical machine - pretty
+    cool.
+</p>
+<p>
+    Sounds fairly simple right? Unfortunately in practice, this process proved
+    much harder than it sounded. The main cause of my frustration in this area
+    was due to the fact that none of the tutorials or documentation I looked at
+stated clearly that    <strong>TAP BRIDGING DOESN'T WORK WITH WIRELESS NICs</strong>. This meant
+    that I spent a few days digging in all the wrong places to try to find a
+    solution to my networking problems, which was very frustrating to say the
+    least.
+</p>
+<h2>
+    <strong>Wireless Bridges and Taps (bit of a tangent)</strong>
+</h2>
+<p>
+    Whilst I wouldn't necessarily <em>need</em> to connect my VMs to the
+    outside network for the final project, I was determined to get this to work
+    so that I could create a solution for others to follow. I also thought that
+    perhaps connection to the outside network would be something that would be
+    helpful somewhere in the grand scheme of the project.
+</p>
+<p>
+    After finally finding out that it doesn't work with wireless NICs, I was
+    able to alter my google searches and start making some progress; however
+    once again I found myself unable to find one single source that had all the
+    information I needed. The documentation regarding this particular (and
+    granted, quite niche) area of VM networking was scattered thin.
+</p>
+<p>
+    This led to a very long and complicated process of attempting to get the
+    wireless bridged networking to function correctly. After trying what seemed
+    like an unending amount of different tutorials and walkthroughs on the
+    process, I finally found a combination of techniques that worked. Have a
+    look at my How-To guide to see how the process works; it involves the use
+    of a few different protocols that needed to be installed alongside regular
+    QEMU.
+</p>
+<h2>
+    <strong>Isolated Networks (actually project related)</strong>
+</h2>
+<p>
+So the kind of networking actually needed to complete the project was    <strong>private</strong> or <strong>isolated</strong> networking; this
+    involves having two or more VMs connected on a Virtual Local Area Network
+    all running on your host machine - however the VMs have no access to the
+    outside network. Your own little self-contained, fully functioning network
+    all running on a singular host.
+</p>
+<p>
+    This should have been a much easier process than creating the wireless
+    bridge network from the previous section, however I should have learned by
+    now to expect the unexpected. No matter how many tutorials or walkthroughs
+    I followed, I couldn't manually configure an isolated network that
+    functioned properly. During the process I even encountered the issue I
+    mentioned right at the beginning of this post wherein Ubuntu was insistent
+    my laptop didn't have a Wi-Fi card.
+</p>
+<p>
+    Eventually I gave in and used an open-source front-end for QEMU systems
+    called Virt-Manager. This configured the network settings for an isolated
+    network with a wizard, and really felt like cheating. I am currently in the
+    process of going through the source code of Virt-Manager in order to
+    understand what it is doing in the background, in order that I might later
+    be able to configure the isolated network manually. I am also in the
+    process of writing another How-To guide on this new area of networking that
+    is not included in my current one.
+</p>
+<h2>
+    <strong>Outro</strong>
+</h2>
+<p>
+    That just about brings you up to date on how far I've come with the
+    project. I will keep this blog updated as I progress further - hope you
+    enjoyed the read!
+</p>
+      </div>
+    </div>
+    <div id="footer">
+      Copyright &copy; textured_blue | <a href="http://validator.w3.org/check?uri=referer">HTML5</a> | <a href="http://jigsaw.w3.org/css-validator/check/referer">CSS</a> | <a href="http://www.html5webtemplates.co.uk">Free CSS Templates</a>
+    </div>
+  </div>
+</body>
+</html>
