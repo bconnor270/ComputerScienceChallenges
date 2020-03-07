@@ -1,0 +1,153 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <title>Getting Started with QEMU</title>
+  <meta name="description" content="website description" />
+  <meta name="keywords" content="website keywords, website keywords" />
+  <meta http-equiv="content-type" content="text/html; charset=windows-1252" />
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Tangerine&amp;v1" />
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz" />
+  <link rel="stylesheet" type="text/css" href="style/style.css" />
+</head>
+
+<body>
+  <div id="main">
+    <div id="header">
+      <div id="logo">
+        <h1>Getting Started with QEMU (including Networking)</h1>
+        <div class="slogan"></div>
+      </div>
+      <div id="menubar">
+        <ul id="menu">
+          <!-- put class="current" in the li tag for the selected page - to highlight which page you're on -->
+          <li><a href="index.html">Intro</a></li>
+          <li><a href="install-qemu.html">1. Install QEMU</a></li>
+          <li><a href="first-vm.html">2. Your first VM</a></li>
+          <li><a href="networking.html">3. Networking</a></li>
+          <li><a href="user-mode.html">3A. User-Mode</a></li>
+          <li><a href="wired.html">3B. Wired TAP</a></li>
+          <li class="current"><a href="wireless.html">3C. Wireless TAP</a></li>
+        </ul>
+      </div>
+    </div>
+    <div id="site_content">
+      
+      <div id="content">
+        <!-- insert the page content here -->
+        <h1>Wireless TAP Networking</h1>
+        <h2>
+    <strong>Intro</strong>
+</h2>
+<p>
+    The process for creating a public bridge with a wireless host NIC is
+    tricky. I found that documentation regarding this area was difficult to
+    find and even more difficult to understand at times, so I hope this
+    explanation helps. Some familiarity with basic networking will make this
+    more readable.
+</p>
+<p>
+    Firstly, a quick explanation of why this is necessary. The bridge virtual
+    device does not support wireless traffic, and hence the strategy of
+    creating a bridge between a TAP device and the host NIC (as we did for the
+    wired connection) will not work.
+</p>
+<p>
+The solution is to use <strong>Proxy ARP</strong> (<strong>A</strong>ddress    <strong>R</strong>esolution <strong>P</strong>rotocol). This is a layer 3
+    solution, and it allows bridged clients to be part of the existing network,
+    and protocols such as DHCP will still work with the appropriate helpers.
+</p>
+<p>
+    Proxy ARP means a device on a given network will answer the ARP queries for
+    a network address that is NOT on that given network. In short, the host
+    machine will proxy ARP requests from the inside (or virtual) network to the
+    outside, and respond to ARP requests from the outside network on behalf of
+    the virtual hosts.
+</p>
+<p>
+    Note that layer-2 protocols such as DHCP will be unable to cross our layer
+    3 bridge, so we will need a helper utility for this to work. This is known
+    as a DHCP Relay.
+</p>
+<h2>
+    <strong>How-To</strong>
+</h2>
+<p>
+    Firstly, there are some additional packages that we will need to install
+    before we get started:
+</p>
+<pre>
+    sudo apt-get install parprouted isc-dhcp-relay avahi-daemon
+</pre>
+<p>
+    After these are installed, use the ifconfig command to determine the name
+    and IP of your wireless NIC, and your network's IP range.
+</p>
+<pre>
+    sudo ifconfig
+</pre>
+<p>
+    For this example we will assume the host wireless NIC is wlan0 with IP
+    192.168.0.33, and the network is 192.168.0.0 with netmask 255.255.255.0 (or
+    suffix /24).
+</p>
+<p>
+    Next, we need to create our TAP device:
+</p>
+<pre>
+    sudo ip tuntap add tap0 mode tap user root
+</pre>
+<p>
+    And then assign it an IP in the range of our network's IP range:
+</p>
+<pre>
+    sudo ip addr add 192.168.0.43/24 dev tap0
+</pre>
+<p>
+    Next, we can start a process called parprouted between our TAP device and
+    our NIC. This will automatically create the appropriate routes for Proxy
+    ARP:
+</p>
+<pre>
+    sudo parprouted -d wlan0 tap0
+</pre>
+<p>
+    <strong>LEAVE THIS TERMINAL WINDOW RUNNING</strong>
+</p>
+<p>
+    Next, open another terminal window. For this step it is necessary that you
+    know the IP address of the DHCP server on your network. (In my case this
+    was 192.168.0.1). This is the terminal we will use to run our DHCP relay.
+</p>
+<p>
+    To start this process, run the following command:
+</p>
+<pre>
+    sudo dhcrelay 192.168.0.1 -i wlan0 -i tap0 -d
+</pre>
+<p>
+    Replace the IP address shown with that of your DHCP server.
+</p>
+<p>
+    <strong>LEAVE THIS TERMINAL WINDOW RUNNING</strong>
+</p>
+<p>
+    Finally, open another terminal window and launch your VM with the following
+    options:
+</p>
+<pre>
+    sudo qemu-system-x86_64 -m 3072 -enable-kvm -hda lubuntu.img -net
+    nic,macaddr=DE:AD:BE:EF:90:26 -net tap,ifname=tap0,script=no
+</pre>
+<p>
+    Congratulations! You now have a bridged wireless network and can interact
+    with your VMs as though they were connected directly.
+</p>
+      </div>
+    </div>
+    <div id="footer">
+      <p>Copyright &copy; simplestyle_8 | <a href="http://validator.w3.org/check?uri=referer">HTML5</a> | <a href="http://jigsaw.w3.org/css-validator/check/referer">CSS</a> | <a href="http://www.html5webtemplates.co.uk">design from HTML5webtemplates.co.uk</a></p>
+    </div>
+  </div>
+</body>
+</html>

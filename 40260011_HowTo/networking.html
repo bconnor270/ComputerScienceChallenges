@@ -1,0 +1,148 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <title>Getting Started with QEMU</title>
+  <meta name="description" content="website description" />
+  <meta name="keywords" content="website keywords, website keywords" />
+  <meta http-equiv="content-type" content="text/html; charset=windows-1252" />
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Tangerine&amp;v1" />
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz" />
+  <link rel="stylesheet" type="text/css" href="style/style.css" />
+</head>
+
+<body>
+  <div id="main">
+    <div id="header">
+      <div id="logo">
+        <h1>Getting Started with QEMU (including Networking)</h1>
+        <div class="slogan"></div>
+      </div>
+      <div id="menubar">
+        <ul id="menu">
+          <!-- put class="current" in the li tag for the selected page - to highlight which page you're on -->
+          <li><a href="index.html">Intro</a></li>
+          <li><a href="install-qemu.html">1. Install QEMU</a></li>
+          <li><a href="first-vm.html">2. Your first VM</a></li>
+          <li class="current"><a href="networking.html">3. Networking</a></li>
+          <li><a href="user-mode.html">3A. User-Mode</a></li>
+          <li><a href="wired.html">3B. Wired TAP</a></li>
+          <li><a href="wireless.html">3C. Wireless TAP</a></li>
+        </ul>
+      </div>
+    </div>
+    <div id="site_content">
+      
+      <div id="content">
+        <!-- insert the page content here -->
+        <h1>Networking</h1>
+<h2>
+    <strong>Intro</strong>
+</h2>
+<p>
+    The networking portion of this tutorial will be divided into sections
+    depending on your hardware, use case and other variables. Hopefully the
+    use-case you need is included amongst them.
+</p>
+<p>
+    QEMU supports networking first by emulating a Network Interface Card (NIC),
+    and then establishing a virtual local area network (VLAN).
+</p>
+<p>
+    There are four ways that QEMU guests can be connected: user mode, socket
+    redirection, TAP, and VDE. This tutorial will cover the details of the two
+    most common methods:
+</p>
+<p>
+    1. User-mode networking
+</p>
+<p>
+    2. TAP bridge networking
+</p>
+<p>
+    <strong></strong>
+</p>
+<h2>
+    <strong>User-mode networking (easy, but not recommended)</strong>
+</h2>
+<p>
+    This is the 'default' networking mode that QEMU will adopt, and is the most
+    simple to set up. Use cases for user-mode networking include the following:
+</p>
+<p>
+    - Your guest can access the host, the internet or resources available on
+    your local network.
+</p>
+<p>
+    - You don't need access to your guest from the network or from another
+    guest.
+</p>
+<p>
+    User-mode networking does not support a number of common networking
+    features, such as ICMP. It is also quite resource intensive to run, and
+    hence may affect the performance of your VM.
+</p>
+<p>
+    TUTORIAL: <a href="user-mode.html">3A. User-Mode Networking</a>
+</p>
+<h2>
+    <strong>TAP Bridge Networking (recommended)</strong>
+</h2>
+<p>
+    A TAP device is a virtual device that behaves much like a real network
+    adaptor. QEMU can use the TAP device to provide full networking support to
+    the guest operating system. This involves using a bridge to connect the
+    guest devices, and perhaps the host device.
+</p>
+<p>
+    TAP devices operate at the data-link layer, and allow for much easier
+    connection between QEMU instances if needed. One TAP device is needed per
+    guest machine.
+</p>
+<p>
+  When you build a VLAN with QEMU (multiple guest machines with emulated NICs) or host a
+  single guest machine, you can choose it to be a self-contained private
+  network (private bridge), or you can connect it to your existing outside network (public bridge).
+  
+    The guest(s) on a private bridge will
+    only be able to communicate with one another - not your real outside network.
+    The guests on a public bridge however are capable
+    of communicating with devices on your real outside network, as well as each other.
+
+</p>
+<p>
+  The kind of bridge you want to use is based on which of these capabilities you want
+  your VM to have. The creation of both types of bridge is covered in this tutorial.
+</p>
+<p>
+    The diagram below shows the layout of two guest machines on a VLAN with a
+    public bridge.
+</p>
+<p>
+    <img
+        width="432"
+        height="437"
+        src="images/diagram.png"
+        alt="Network diagram"
+    />
+</p>
+<p>
+    The process for creating a private bridge is the same for both wired and
+    wireless NICs on the host machine. However, in order to make a public
+    bridge the process differs. Select the instructions below that best suit
+    you:
+</p>
+<p>
+    <a href="wired.html">3B. Wired TAP Networking (or wireless private)</a>
+</p>
+<p>
+    <a href="wireless.html">3C. Wireless TAP Networking (public)</a>
+</p>
+      </div>
+    </div>
+    <div id="footer">
+      <p>Copyright &copy; simplestyle_8 | <a href="http://validator.w3.org/check?uri=referer">HTML5</a> | <a href="http://jigsaw.w3.org/css-validator/check/referer">CSS</a> | <a href="http://www.html5webtemplates.co.uk">design from HTML5webtemplates.co.uk</a></p>
+    </div>
+  </div>
+</body>
+</html>

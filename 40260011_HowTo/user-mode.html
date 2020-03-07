@@ -1,0 +1,70 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <title>Getting Started with QEMU</title>
+  <meta name="description" content="website description" />
+  <meta name="keywords" content="website keywords, website keywords" />
+  <meta http-equiv="content-type" content="text/html; charset=windows-1252" />
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Tangerine&amp;v1" />
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz" />
+  <link rel="stylesheet" type="text/css" href="style/style.css" />
+</head>
+
+<body>
+  <div id="main">
+    <div id="header">
+      <div id="logo">
+        <h1>Getting Started with QEMU (including Networking)</h1>
+        <div class="slogan"></div>
+      </div>
+      <div id="menubar">
+        <ul id="menu">
+          <!-- put class="current" in the li tag for the selected page - to highlight which page you're on -->
+          <li><a href="index.html">Intro</a></li>
+          <li><a href="install-qemu.html">1. Install QEMU</a></li>
+          <li><a href="first-vm.html">2. Your first VM</a></li>
+          <li><a href="networking.html">3. Networking</a></li>
+          <li class="current"><a href="user-mode.html">3A. User-Mode</a></li>
+          <li><a href="wired.html">3B. Wired TAP</a></li>
+          <li><a href="wireless.html">3C. Wireless TAP</a></li>
+        </ul>
+      </div>
+    </div>
+    <div id="site_content">
+      
+      <div id="content">
+        <!-- insert the page content here -->
+        <h1>User-Mode Networking</h1>
+        <h2>
+    <strong>Intro</strong>
+</h2>
+<p>
+    User-mode networking is the easiest kind of networking to set up. We simply
+    have to declare that we want the user VLAN mode and specify a NIC at the
+    time of launching our virtual machine. See an example below:
+</p>
+<pre>
+    sudo qemu-system-x86_64 -m 3072 -enable-kvm -hda test-image.img -netdev user,id=net0 -device e1000,netdev=net0,
+    mac=DE:AD:BE:EF:12:34
+</pre>
+<p>
+    <strong>'-netdev user,id=net0'</strong>
+    : Here we declare that we want a user-mode VLAN, and we name it net0.
+</p>
+<p>
+    <strong>'-device e1000,netdev=net0,mac=...'</strong>
+    : Here we are specifying that we want the e1000 NIC, and attribute it to
+    our VLAN and then assign it a MAC address.
+</p>
+<p>
+    This will launch your VM with User-Mode networking.
+</p>
+      </div>
+    </div>
+    <div id="footer">
+      <p>Copyright &copy; simplestyle_8 | <a href="http://validator.w3.org/check?uri=referer">HTML5</a> | <a href="http://jigsaw.w3.org/css-validator/check/referer">CSS</a> | <a href="http://www.html5webtemplates.co.uk">design from HTML5webtemplates.co.uk</a></p>
+    </div>
+  </div>
+</body>
+</html>

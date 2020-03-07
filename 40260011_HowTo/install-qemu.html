@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <title>Getting Started with QEMU</title>
+  <meta name="description" content="website description" />
+  <meta name="keywords" content="website keywords, website keywords" />
+  <meta http-equiv="content-type" content="text/html; charset=windows-1252" />
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Tangerine&amp;v1" />
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz" />
+  <link rel="stylesheet" type="text/css" href="style/style.css" />
+</head>
+
+<body>
+  <div id="main">
+    <div id="header">
+      <div id="logo">
+        <h1>Getting Started with QEMU (including Networking)</h1>
+        <div class="slogan"></div>
+      </div>
+      <div id="menubar">
+        <ul id="menu">
+          <!-- put class="current" in the li tag for the selected page - to highlight which page you're on -->
+          <li><a href="index.html">Intro</a></li>
+          <li class="current"><a href="install-qemu.html">1. Install QEMU</a></li>
+          <li><a href="first-vm.html">2. Your first VM</a></li>
+          <li><a href="networking.html">3. Networking</a></li>
+          <li><a href="user-mode.html">3A. User-Mode</a></li>
+          <li><a href="wired.html">3B. Wired TAP</a></li>
+          <li><a href="wireless.html">3C. Wireless TAP</a></li>
+        </ul>
+      </div>
+    </div>
+    <div id="site_content">
+      
+      <div id="content">
+        <!-- insert the page content here -->
+        <h1>Install QEMU</h1>
+        <p>
+    QEMU and its dependencies are packaged within most Linux distributions.
+    Open a terminal window and type the command:
+</p>
+<p>
+    <pre>&#9;sudo apt-get install qemu qemu-kvm libvirt-bin</pre>
+</p>
+<p>
+    You will be prompted for your password and then your machine will install
+    QEMU and its dependencies.
+</p>
+<p>
+The keyword <strong>'sudo'</strong> in this command stands for    <strong>S</strong>uper <strong>U</strong>ser <strong>DO</strong>. It allows
+    commands to be run as the root user without actually having to be signed in
+    as the root user.
+</p>
+<p>
+    <strong>Background Knowledge</strong>
+: the '<strong>apt-get</strong>' part of this command stands for    <strong>A</strong>dvanced <strong>P</strong>ackage <strong>T</strong>ool -
+    an extremely common tool used to manage the installation of software onto
+    Debian/Ubuntu distributions.
+</p>
+      </div>
+    </div>
+    <div id="footer">
+      <p>Copyright &copy; simplestyle_8 | <a href="http://validator.w3.org/check?uri=referer">HTML5</a> | <a href="http://jigsaw.w3.org/css-validator/check/referer">CSS</a> | <a href="http://www.html5webtemplates.co.uk">design from HTML5webtemplates.co.uk</a></p>
+    </div>
+  </div>
+</body>
+</html>

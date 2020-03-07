@@ -1,0 +1,187 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <title>Getting Started with QEMU</title>
+  <meta name="description" content="website description" />
+  <meta name="keywords" content="website keywords, website keywords" />
+  <meta http-equiv="content-type" content="text/html; charset=windows-1252" />
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Tangerine&amp;v1" />
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz" />
+  <link rel="stylesheet" type="text/css" href="style/style.css" />
+</head>
+
+<body>
+  <div id="main">
+    <div id="header">
+      <div id="logo">
+        <h1>Getting Started with QEMU (including Networking)</h1>
+        <div class="slogan"></div>
+      </div>
+      <div id="menubar">
+        <ul id="menu">
+          <!-- put class="current" in the li tag for the selected page - to highlight which page you're on -->
+          <li><a href="index.html">Intro</a></li>
+          <li><a href="install-qemu.html">1. Install QEMU</a></li>
+          <li class="current"><a href="first-vm.html">2. Your first VM</a></li>
+          <li><a href="networking.html">3. Networking</a></li>
+          <li><a href="user-mode.html">3A. User-Mode</a></li>
+          <li><a href="wired.html">3B. Wired TAP</a></li>
+          <li><a href="wireless.html">3C. Wireless TAP</a></li>
+        </ul>
+      </div>
+    </div>
+    <div id="site_content">
+      
+      <div id="content">
+        <!-- insert the page content here -->
+        <h1>Creating your first VM</h1>
+        <p>
+    <strong>NOTE: </strong>
+    To start a virtual machine, you must have a disk image for the Operating
+    System you wish to emulate (usually a .iso file). For testing I personally
+    used <a href="https://lubuntu.net/downloads/">Lubuntu</a>, a lightweight version of Ubuntu that provides the bare-bones
+    basics for an operating system.
+</p>
+<p>
+    <strong></strong>
+</p>
+<h2>
+    <strong>Create your working directory</strong>
+</h2>
+<p>
+    I like to create a directory to carry out the creation of the virtual
+    machine within. Open up a terminal window and type the following command:
+</p>
+
+    <pre>&#9;mkdir QemuTesting</pre>
+
+<p>
+    You can then move your downloaded .iso file into this directory, and type
+    the command
+</p>
+<pre>
+    &#9;cd QemuTesting
+</pre>
+<p>
+    To navigate into the directory from inside your terminal window.
+</p>
+<p>
+  You can use the command:
+</p>
+<pre>
+  &#9;ls
+</pre>
+<p>
+  to list the files in the directory; make sure you can see your .iso file.
+</p>
+<h2>
+    <strong>Using QEMU</strong>
+</h2>
+<p>
+    Firstly, we need to create a virtual hard drive image to have somewhere to
+    install our emulated operating system to. QEMU provides the 'qemu-img' tool
+    for this. Use the following command:
+</p>
+<pre>
+    &#9;qemu-img create -f qcow2 test-image.img 10G
+</pre>
+<p>
+    Command terms explained:
+</p>
+<p>
+    <strong>'-f qcow2'</strong>
+    : determines the format of the created hard disk image.
+</p>
+<p>
+    <strong>'test-image.img'</strong>
+    : the name of the image; you can change this to whatever you would like.
+</p>
+<p>
+    <strong>'10G'</strong>
+    : the <strong><em>potential</em></strong> size of the image; 10 gigabytes
+    in this case is sufficient for most Linux distros; other operating systems
+    may eventually require more.
+</p>
+<p>
+    Note that this image file does not take up 10 gigabytes on the hard drive
+    as soon as it has been created; this is merely the maximum capacity it
+    could take. (It should start at around 150KB).
+</p>
+<p>
+    Having created our disk image, we can now boot our virtual machine from our
+    .iso file, and install the OS onto the virtual hard disk image we created.
+    This is where QEMU's multitude of options and architecture possibilities
+    come in, the scope of which is outside this tutorial but I will explain as
+    best I can the different parameters.
+</p>
+<p>
+    Use the following command to run the virtual machine:
+</p>
+<pre>
+    &#9;sudo qemu-system-x86_64 -m 3072 -enable-kvm -boot d -hda test-image.img -cdrom lubuntu-18.04-alternate.iso
+</pre>
+<p>
+    Command terms explained:
+</p>
+<p>
+    <strong>'qemu-system-x86_64'</strong>
+    : This is where we decide what architecture we want our virtual machine to
+    take. QEMU supports many architectures a list of which you can view by
+    typing 'qemu-system-' into a terminal window and then pressing the TAB key
+    twice. In this case we are using the 64-bit Intel x86 platform.
+</p>
+<p>
+    <strong>'-m 3072'</strong>
+    : The amount of memory we want to allow the guest machine to use (in
+    bytes). Change according to your needs.
+</p>
+<p>
+    <strong>'-enable-kvm'</strong>
+    : This command allows the KVM technology built into Linux to emulate the
+    architecture we want. Without this command, QEMU will use software
+    emulation which is considerably slower.
+</p>
+<p>
+    <strong>'-boot d': </strong>
+    This command allows you to specify the boot order. The 'd' option will
+    prioritize the "CD-ROM" (your .iso file) over the hard disk image
+    (test-image.img).
+</p>
+<p>
+    <strong>'-hda test-image.img'</strong>
+    : Here we specify the location of the hard drive we wish to use. In this
+    case it is the 'test-image.img' we created earlier.
+</p>
+<p>
+    <strong>'-cdrom lubuntu-18.04-alternate.iso'</strong>
+    : Here we specify the .iso file we wish to boot from.
+</p>
+<p>
+    After running this command, your virtual machine will appear in a separate
+    window. <strong>DO NOT CLOSE THE TERMINAL WINDOW</strong>, as this will
+    terminate the QEMU process and hence your virtual machine.
+</p>
+<p>
+    Once your emulated OS loads up, you can install the OS as you normally
+    would onto your virtual hard drive image.
+</p>
+<p>
+    Having installed your OS onto the test-image.img file, you can boot your
+    virtual machine straight from it next time by using the same command as
+    before, without the '-cdrom' and '-boot d' options:
+</p>
+<pre>
+    &#9;sudo qemu-system-x86_64 -m 3072 -enable-kvm -hda test-image.img
+</pre>
+<p>
+    Congratulations! You now have your first virtual machine up-and-running.
+</p>
+      </div>
+    </div>
+    <div id="footer">
+      <p>Copyright &copy; simplestyle_8 | <a href="http://validator.w3.org/check?uri=referer">HTML5</a> | <a href="http://jigsaw.w3.org/css-validator/check/referer">CSS</a> | <a href="http://www.html5webtemplates.co.uk">design from HTML5webtemplates.co.uk</a></p>
+    </div>
+  </div>
+</body>
+</html>

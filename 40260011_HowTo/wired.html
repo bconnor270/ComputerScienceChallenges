@@ -1,0 +1,201 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <title>Getting Started with QEMU</title>
+  <meta name="description" content="website description" />
+  <meta name="keywords" content="website keywords, website keywords" />
+  <meta http-equiv="content-type" content="text/html; charset=windows-1252" />
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Tangerine&amp;v1" />
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz" />
+  <link rel="stylesheet" type="text/css" href="style/style.css" />
+</head>
+
+<body>
+  <div id="main">
+    <div id="header">
+      <div id="logo">
+        <h1>Getting Started with QEMU (including Networking)</h1>
+        <div class="slogan"></div>
+      </div>
+      <div id="menubar">
+        <ul id="menu">
+          <!-- put class="current" in the li tag for the selected page - to highlight which page you're on -->
+          <li><a href="index.html">Intro</a></li>
+          <li><a href="install-qemu.html">1. Install QEMU</a></li>
+          <li><a href="first-vm.html">2. Your first VM</a></li>
+          <li><a href="networking.html">3. Networking</a></li>
+          <li><a href="user-mode.html">3A. User-Mode</a></li>
+          <li class="current"><a href="wired.html">3B. Wired TAP</a></li>
+          <li><a href="wireless.html">3C. Wireless TAP</a></li>
+        </ul>
+      </div>
+    </div>
+    <div id="site_content">
+      
+      <div id="content">
+        <!-- insert the page content here -->
+        <h1>Wired TAP Networking</h1>
+        <h2>
+    <strong>Intro</strong>
+</h2>
+<p>
+    Wired TAP Networking has a few more steps to take than user-mode
+    networking, however it provides a much more comprehensive network
+    functionality. As mentioned, you can either have a private or public
+    bridge: The guests on a private VLAN will only be able to communicate with
+    one another - not your outside real network, the internet etc. The guests
+    on a public VLAN however are capable of communicating with devices on your
+    outside real network, as well as the internet etc.
+</p>
+<p>
+    The general structure of both types is much the same; both processes are
+    outlined below. The process for private bridge will work with Wireless host
+    NICs, however see 3C. for <a href="wireless.html">public bridges with wireless host NICs.</a>
+</p>
+<h2>
+    <strong>Private bridge</strong>
+</h2>
+<p>
+    The first step is to create our bridge:
+</p>
+<pre>
+    sudo ip link add br0 type bridge
+</pre>
+<p>
+    And then put it up:
+</p>
+<pre>
+    sudo ifconfig br0 up
+</pre>
+<p>
+    Next we need to create our tap device(s):
+</p>
+<pre>
+    sudo ip tuntap add tap0 mode tap user root
+</pre>
+<p>
+    And put them up too:
+</p>
+<pre>
+    sudo ifconfig tap0 up
+</pre>
+<p>
+    Note that you will need a separate tap device for every guest machine you
+    wish to be part of the network, so you can repeat the last two commands but
+    change 'tap0' to a different name (tap1, tap2 etc. is common etiquette).
+</p>
+<p>
+    After creating your tap devices, add them to the bridge:
+</p>
+<pre>
+    sudo ip link set tap0 master br0
+</pre>
+<p>
+    Repeat this step for each of your tap devices. With your framework created,
+    you can now start your guest machines. See the examples below for the
+    appropriate options:
+</p>
+<pre>
+    sudo qemu-system-x86_64 -m 3072 -enable-kvm -hda test-image.img -netdev
+    tap,id=net0,ifname=tap0 -device e1000,netdev=net0,mac=DE:AD:BE:EF:12:34
+</pre>
+<p>
+    <strong>'-netdev tap,id=net0,ifname=tap0'</strong>
+    : Here we specify that we are using a TAP VLAN named 'net0', and declare
+    the name of the tap device we wish to use. Note that for each new VM you
+    run, you should alter 'tap0' to a different TAP device as created above.
+</p>
+<p>
+    <strong>'-device e1000,netdev=net0,mac=...'</strong>
+    : Here we declare that we want the e1000 NIC to be emulated, and state
+    that we want to use the 'net0' VLAN we created. Note that you must also
+    choose a new MAC address for every new VM you wish to run.
+</p>
+<p>
+  You have now created a private VLAN on your host machine! You can test the connection by
+  pinging back and forth between the VMs.
+</p>
+<h2>
+    <strong>Public Bridge</strong>
+</h2>
+<p>
+    The first step is to create our bridge:
+</p>
+<pre>
+    sudo ip link add br0 type bridge
+</pre>
+<p>
+    And then put it up:
+</p>
+<pre>
+    sudo ifconfig br0 up
+</pre>
+<p>
+    Next, we need to flush the IP address of our host NIC (this is usually
+    eth0, however you can check using the command ifconfig):
+</p>
+<pre>
+    sudo ip addr flush dev eth0
+</pre>
+<p>
+    NOTE: this command will cut your connection to your network! Don't worry,
+    it will be restored
+</p>
+<p>
+    We can then add our host NIC to the bridge:
+</p>
+<pre>
+    sudo ip link set eth0 master br0
+</pre>
+<p>
+    Next we need to create our tap device:
+</p>
+<pre>
+    sudo ip tuntap add tap0 mode tap user root
+</pre>
+<p>
+  And add it to the bridge:
+</p>
+<pre>
+  sudo ip link set tap0 master br0
+</pre>
+<p>
+    Then we need to put it up:
+</p>
+<pre>
+    sudo ifconfig tap0 up
+</pre>
+<p>
+    We can then restore our eth0:
+</p>
+<pre>
+    sudo ifconfig eth0 up
+</pre>
+<p>
+    Finally, re-assign an IP address but this time to your bridge:
+</p>
+<pre>
+    sudo dhclient -v br0
+</pre>
+<p>
+    Use the following options when launching your VMs:
+</p>
+<pre>
+    sudo qemu-system-x86_64 -m 3072 -enable-kvm -hda test-image.img -netdev
+    tap,id=net0,ifname=tap0 -device e1000,netdev=net0,mac=DE:AD:BE:EF:12:34
+</pre>
+<p>
+    See the section on private bridges for an explanation of these options.
+</p>
+<p>
+  You have now created a public VLAN on your host machine!
+</p>
+      </div>
+    </div>
+    <div id="footer">
+      <p>Copyright &copy; simplestyle_8 | <a href="http://validator.w3.org/check?uri=referer">HTML5</a> | <a href="http://jigsaw.w3.org/css-validator/check/referer">CSS</a> | <a href="http://www.html5webtemplates.co.uk">design from HTML5webtemplates.co.uk</a></p>
+    </div>
+  </div>
+</body>
+</html>
