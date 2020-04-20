@@ -9,7 +9,7 @@ RunVMUserModeNetworking - this will run an image with an OS already installed, w
 RunVMWiredTAP - this will run an image with an OS already installed, and will add the device to either a privately or publicly bridged network.
 	This script can be run multiple times in succession in order to construct a VLAN. (NB: the same image cannot be instantiated more than once).
 
-TODO: Create a script to automate Wireless TAP Networking - see How-To guide stored in master/40260011_HowTo/wireless.html
+TODO: Create a script to automate Wireless TAP Networking - see How-To guide stored in ComputerScienceChallenges/40260011_HowTo/wireless.html
 
 
 
