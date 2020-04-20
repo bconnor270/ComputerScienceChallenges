@@ -1,4 +1,4 @@
-# Scripts for the QEMU project.
+Scripts for the QEMU project.
 
 FirstTimeInstallation.sh - this will perform the first time running of a brand new VM.
 
