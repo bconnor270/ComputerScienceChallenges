@@ -14,6 +14,6 @@ TODO: Create a script to automate Wireless TAP Networking - see How-To guide sto
 
 
 
-Author: Ben Connor
+Author: Benjamin Mark Connor
 Student No: 40260011
 Queen's University Belfast
